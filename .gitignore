@@ -13,6 +13,9 @@
 
 # misc
 .DS_Store
+
+config/default.json
+
 .env
 .env.local
 .env.development.local
