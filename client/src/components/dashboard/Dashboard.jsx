@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 import Spinner from '../common/Spinner';
 import DashboardActions from './DashboardActions';
+import Experience from './Experience';
+import Education from './Education';
 
 import { getCurrentProfile } from '../../redux/actions/profile.action';
 
@@ -28,6 +30,8 @@ const Dashboard = ({
       {profile !== null ? (
         <Fragment>
           <DashboardActions />
+          <Experience experience={profile.experience} />
+          <Education education={profile.education} />
         </Fragment>
       ) : (
         <Fragment>
