@@ -16,8 +16,6 @@ const AddEducation = ({ addEducation, history }) => {
     description: ''
   });
 
-  const [toDateDisabled, toggleDisabled] = useState(false);
-
   const {
     school,
     degree,
@@ -91,9 +89,8 @@ const AddEducation = ({ addEducation, history }) => {
               name='current'
               checked={current}
               value={current}
-              onChange={(e) => {
+              onChange={() => {
                 setFormData({ ...formData, current: !current });
-                toggleDisabled(!toDateDisabled);
               }}
             />{' '}
             Current School
@@ -107,7 +104,7 @@ const AddEducation = ({ addEducation, history }) => {
             name='to'
             value={to}
             onChange={onChange}
-            disabled={toDateDisabled ? 'disabled' : ''}
+            disabled={current}
           />
         </div>
 
