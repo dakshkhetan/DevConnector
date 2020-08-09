@@ -1,5 +1,6 @@
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_ERROR,
   CLEAR_PROFILE,
   UPDATE_PROFILE
@@ -22,6 +23,13 @@ const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         profile: payload,
+        loading: false
+      };
+
+    case GET_PROFILES:
+      return {
+        ...state,
+        profiles: payload,
         loading: false
       };
 
