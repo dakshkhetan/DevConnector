@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 
-const Post = require('../models/Post');
-const User = require('../models/User');
+const Post = require('../models/Post.model');
+const User = require('../models/User.model');
 
 exports.createPost = async (req, res) => {
   const errors = validationResult(req);
@@ -93,7 +93,7 @@ exports.likePost = async (req, res) => {
     // prettier-ignore
 
     // check if the post has already been liked by the user
-    if (post.likes.filter((like) => like.user.toString() === req.user.id).length > 0) {
+    if (post.likes.some(like => like.user.toString() === req.user.id)) {
       return res.status(400).json({ msg: 'Post already liked' });
     }
 
@@ -115,17 +115,15 @@ exports.unlikePost = async (req, res) => {
 
     // prettier-ignore
 
-    // check if the post has already been liked by the user
-    if (post.likes.filter((like) => like.user.toString() === req.user.id).length === 0) {
+    // check if the post has not been liked by the user
+    if (!post.likes.some(like => like.user.toString() === req.user.id)) {
       return res.status(400).json({ msg: 'Post has not yet been liked' });
     }
 
-    // get index of the 'like' to be deleted
-    const removeIndex = post.likes
-      .map((like) => like.user.toString())
-      .indexOf(req.user.id);
-
-    post.likes.splice(removeIndex, 1);
+    // remove the like
+    post.likes = post.likes.filter(
+      ({ user }) => user.toString() !== req.user.id
+    );
 
     await post.save();
 
