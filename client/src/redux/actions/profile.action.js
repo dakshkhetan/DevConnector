@@ -4,6 +4,7 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   GET_REPOS,
+  NO_REPOS,
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CLEAR_PROFILE,
@@ -11,13 +12,7 @@ import {
 } from './types';
 import { setAlert } from './alert.action';
 
-import setAuthToken from '../../utils/setAuthToken';
-
 export const getCurrentProfile = () => async (dispatch) => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
-
   try {
     const res = await axios.get('/api/profile/me');
 
@@ -85,13 +80,7 @@ export const getGithubRepos = (username) => async (dispatch) => {
       payload: res.data
     });
   } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        status: err.response.status,
-        msg: err.response.data.msg
-      }
-    });
+    dispatch({ type: NO_REPOS });
   }
 };
 
