@@ -1,10 +1,12 @@
 const express = require('express');
+const compression = require('compression');
 const connectDB = require('./config/db');
 
 const app = express();
 
 connectDB();
 
+app.use(compression());
 app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => res.send('API Running'));
