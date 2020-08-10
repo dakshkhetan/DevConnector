@@ -4,6 +4,10 @@ const connectDB = require('./config/db');
 
 const app = express();
 
+require('dotenv').config({
+  path: './config/config.env'
+});
+
 connectDB();
 
 app.use(compression());
