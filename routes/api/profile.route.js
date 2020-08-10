@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const auth = require('../../middleware/auth');
+const checkObjectId = require('../../middleware/checkObjectId');
 const {
   validProfile,
   validExperience,
@@ -24,7 +25,7 @@ const {
 router.get('/me', auth, getCurrentUserProfile);
 router.post('/', auth, validProfile, createOrUpdateUserProfile);
 router.get('/', getAllProfiles);
-router.get('/user/:user_id', getProfileById);
+router.get('/user/:user_id', checkObjectId('user_id'), getProfileById);
 router.delete('/', auth, deleteAccount);
 router.put('/experience', auth, validExperience, addProfileExperience);
 router.put('/education', auth, validEducation, addProfileEducation);
