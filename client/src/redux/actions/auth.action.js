@@ -21,7 +21,13 @@ export const loadUser = () => async (dispatch) => {
       payload: res.data
     });
   } catch (err) {
-    dispatch({ type: AUTH_ERROR });
+    dispatch({
+      type: AUTH_ERROR,
+      payload: {
+        status: err.response.status,
+        msg: err.response.data.msg
+      }
+    });
   }
 };
 
@@ -65,9 +71,7 @@ export const login = (email, password) => async (dispatch) => {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
 
-    dispatch({
-      type: LOGIN_FAIL
-    });
+    dispatch({ type: LOGIN_FAIL });
   }
 };
 

@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 
-const Post = require('../models/Post.model');
-const User = require('../models/User.model');
+const Post = require('../models/post.model');
+const User = require('../models/user.model');
 
 exports.createPost = async (req, res) => {
   const errors = validationResult(req);

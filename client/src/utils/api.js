@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+import store from '../redux/store';
+import { LOGOUT } from '../redux/actions/types';
+
 const api = axios.create({
   baseURL: '/api',
   headers: {

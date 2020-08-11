@@ -4,7 +4,7 @@ const gravatar = require('gravatar');
 const normalize = require('normalize-url');
 const { validationResult } = require('express-validator');
 
-const User = require('../models/User.model');
+const User = require('../models/user.model');
 
 exports.registerUser = async (req, res) => {
   const errors = validationResult(req);

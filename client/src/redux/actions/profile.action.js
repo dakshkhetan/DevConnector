@@ -1,4 +1,5 @@
 import api from '../../utils/api';
+import setAuthToken from '../../utils/setAuthToken';
 
 import {
   GET_PROFILE,
@@ -15,6 +16,7 @@ import { setAlert } from './alert.action';
 
 export const getCurrentProfile = () => async (dispatch) => {
   try {
+    setAuthToken(localStorage.token);
     const res = await api.get('/profile/me');
 
     dispatch({

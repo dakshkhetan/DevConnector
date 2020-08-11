@@ -21,11 +21,23 @@ const postReducer = (state = initialState, action) => {
 
   switch (type) {
     case GET_POSTS:
-    case GET_POST:
-    case POST_ERROR:
       return {
         ...state,
         posts: payload,
+        loading: false
+      };
+
+    case GET_POST:
+      return {
+        ...state,
+        post: payload,
+        loading: false
+      };
+
+    case POST_ERROR:
+      return {
+        ...state,
+        error: payload,
         loading: false
       };
 
