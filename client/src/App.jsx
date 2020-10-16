@@ -9,8 +9,7 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
-import CreateProfile from './components/profile-forms/CreateProfile';
-import EditProfile from './components/profile-forms/EditProfile';
+import ProfileForm from './components/profile-forms/ProfileForm';
 import AddExperience from './components/profile-forms/AddExperience';
 import AddEducation from './components/profile-forms/AddEducation';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -43,12 +42,12 @@ const App = () => {
               <PrivateRoute
                 exact
                 path='/create-profile'
-                component={CreateProfile}
+                component={ProfileForm}
               />
               <PrivateRoute
                 exact
                 path='/edit-profile'
-                component={EditProfile}
+                component={ProfileForm}
               />
               <PrivateRoute
                 exact
