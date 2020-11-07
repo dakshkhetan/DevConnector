@@ -6,7 +6,8 @@ import {
   POST_ERROR,
   UPDATE_LIKES,
   DELETE_POST,
-  ADD_POST
+  ADD_POST,
+  ADD_COMMENT
 } from './types';
 
 import { setAlert } from './alert.action';
@@ -124,6 +125,37 @@ export const getPost = (id) => async (dispatch) => {
       type: GET_POST,
       payload: res.data
     });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: {
+        status: err.response.status,
+        msg: err.response.data.msg
+      }
+    });
+  }
+};
+
+export const addComment = (postId, formData) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post(
+      `/api/posts/comment/${postId}`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: ADD_COMMENT,
+      payload: res.data
+    });
+
+    dispatch(setAlert('Comment Added', 'success'));
   } catch (err) {
     dispatch({
       type: POST_ERROR,

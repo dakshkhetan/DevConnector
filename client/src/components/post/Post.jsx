@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import Spinner from '../common/Spinner';
 import PostItem from '../posts/PostItem';
+import CommentForm from '../post/CommentForm';
 
 import { getPost } from '../../redux/actions/post.action';
 
@@ -21,6 +22,7 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
         Back To Posts
       </Link>
       <PostItem post={post} showActions={false} />
+      <CommentForm postId={post._id} />
     </React.Fragment>
   );
 };
