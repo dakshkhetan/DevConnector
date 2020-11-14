@@ -19,11 +19,8 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// routes
-app.use('/api/users', require('./routes/api/users'));
-app.use('/api/auth', require('./routes/api/auth'));
-app.use('/api/profile', require('./routes/api/profile'));
-app.use('/api/posts', require('./routes/api/posts'));
+const apiRoutes = require('./routes/api/root.route');
+app.use('/api', apiRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
