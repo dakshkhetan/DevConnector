@@ -1,9 +1,10 @@
 const axios = require('axios');
+const normalize = require('normalize-url');
 const { validationResult } = require('express-validator');
 
-const Post = require('../models/Post');
-const Profile = require('../models/Profile');
-const User = require('../models/User');
+const Post = require('../models/Post.model');
+const Profile = require('../models/Profile.model');
+const User = require('../models/User.model');
 
 exports.getCurrentUserProfile = async (req, res) => {
   try {
@@ -43,46 +44,36 @@ exports.createOrUpdateUserProfile = async (req, res) => {
     linkedin
   } = req.body;
 
-  // build profile object
-  const profileFields = {};
+  const profileFields = {
+    user: req.user.id,
+    company,
+    location,
+    website:
+      website && website !== '' ? normalize(website, { forceHttps: true }) : '',
+    bio,
+    skills: Array.isArray(skills)
+      ? skills
+      : skills.split(',').map((skill) => ' ' + skill.trim()),
+    status,
+    githubusername
+  };
 
-  profileFields.user = req.user.id;
+  const socialfields = { youtube, twitter, instagram, linkedin, facebook };
 
-  if (company) profileFields.company = company;
-  if (website) profileFields.website = website;
-  if (location) profileFields.location = location;
-  if (bio) profileFields.bio = bio;
-  if (status) profileFields.status = status;
-  if (githubusername) profileFields.githubusername = githubusername;
-  if (skills) {
-    profileFields.skills = skills.split(',').map((skill) => skill.trim());
+  for (const [key, value] of Object.entries(socialfields)) {
+    let socialLink = value;
+    if (socialLink && socialLink.length > 0)
+      socialfields[key] = normalize(socialLink, { forceHttps: true });
   }
 
-  // build social object
-  profileFields.social = {};
-  if (youtube) profileFields.social.youtube = youtube;
-  if (twitter) profileFields.social.twitter = twitter;
-  if (facebook) profileFields.social.facebook = facebook;
-  if (linkedin) profileFields.social.linkedin = linkedin;
-  if (instagram) profileFields.social.instagram = instagram;
+  profileFields.social = socialfields;
 
   try {
-    let profile = await Profile.findOne({ user: req.user.id });
-
-    if (profile) {
-      // update profile
-      profile = await Profile.findOneAndUpdate(
-        { user: req.user.id },
-        { $set: profileFields },
-        { new: true }
-      );
-
-      return res.json(profile);
-    }
-
-    // create new profile
-    profile = new Profile(profileFields);
-    await profile.save();
+    let profile = await Profile.findOneAndUpdate(
+      { user: req.user.id },
+      { $set: profileFields },
+      { new: true, upsert: true }
+    );
 
     return res.json(profile);
   } catch (err) {
@@ -213,12 +204,9 @@ exports.deleteExperience = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
-    // get the index of experience to be deleted
-    const removeIndex = profile.experience
-      .map((item) => item.id)
-      .indexOf(req.params.exp_id);
-
-    profile.experience.splice(removeIndex, 1);
+    profile.experience = profile.experience.filter(
+      (exp) => exp._id.toString() !== req.params.exp_id
+    );
 
     await profile.save();
 
@@ -233,11 +221,9 @@ exports.deleteEducation = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
-    const removeIndex = profile.education
-      .map((item) => item.id)
-      .indexOf(req.params.edu_id);
-
-    profile.education.splice(removeIndex, 1);
+    profile.education = profile.education.filter(
+      (edu) => edu._id.toString() !== req.params.edu_id
+    );
 
     await profile.save();
 

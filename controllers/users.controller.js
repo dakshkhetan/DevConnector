@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
+const normalize = require('normalize-url');
 const { validationResult } = require('express-validator');
 
-const User = require('../models/User');
+const User = require('../models/User.model');
 
 exports.registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -21,11 +22,14 @@ exports.registerUser = async (req, res) => {
     }
 
     // generate avatar
-    const avatar = gravatar.url(email, {
-      s: '200',
-      r: 'pg',
-      d: 'mm'
-    });
+    const avatar = normalize(
+      gravatar.url(email, {
+        s: '200',
+        r: 'pg',
+        d: 'mm'
+      }),
+      { forceHttps: true }
+    );
 
     user = new User({
       name,
@@ -49,7 +53,7 @@ exports.registerUser = async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 360000 },
+      { expiresIn: '5 days' },
       (err, token) => {
         if (err) throw err;
         res.json({ token });
