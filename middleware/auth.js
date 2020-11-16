@@ -6,14 +6,20 @@ module.exports = function (req, res, next) {
   if (!token) {
     return res
       .status(401)
-      .json({ msg: 'Token missing! Authorization denied.' });
+      .json({ msg: 'Token missing, authorization denied.' });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded.user;
-    next();
+    jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
+      if (error) {
+        return res.status(401).json({ msg: 'Token is not valid' });
+      } else {
+        req.user = decoded.user;
+        next();
+      }
+    });
   } catch (err) {
-    return res.status(401).json({ msg: 'Token is not valid' });
+    console.error('Something went wrong with auth middleware.');
+    return res.status(500).json({ msg: 'Server Error' });
   }
 };

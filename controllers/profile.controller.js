@@ -105,11 +105,6 @@ exports.getProfileById = async (req, res) => {
     return res.json(profile);
   } catch (err) {
     console.error(err.message);
-
-    if (err.kind == 'ObjectId') {
-      return res.status(400).json({ msg: 'Profile not found' });
-    }
-
     return res.status(500).send('Server Error');
   }
 };

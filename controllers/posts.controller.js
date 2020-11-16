@@ -49,11 +49,6 @@ exports.getPostById = async (req, res) => {
     return res.json(post);
   } catch (err) {
     console.error(err.message);
-
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Post not found' });
-    }
-
     return res.status(500).send('Server Error');
   }
 };
@@ -77,11 +72,6 @@ exports.deletePost = async (req, res) => {
     return res.json({ msg: 'Post removed' });
   } catch (err) {
     console.error(err.message);
-
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Post not found' });
-    }
-
     return res.status(500).send('Server Error');
   }
 };
