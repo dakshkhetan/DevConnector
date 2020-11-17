@@ -12,13 +12,7 @@ import {
 
 import { setAlert } from './alert.action';
 
-import setAuthToken from '../../utils/setAuthToken';
-
 export const loadUser = () => async (dispatch) => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
-
   try {
     const res = await axios.get('/api/auth');
 
@@ -31,15 +25,13 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
-export const register = ({ name, email, password }) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
   const config = {
     headers: { 'Content-Type': 'application/json' }
   };
 
-  const body = JSON.stringify({ name, email, password });
-
   try {
-    const res = await axios.post('/api/users', body, config);
+    const res = await axios.post('/api/users', formData, config);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -65,7 +57,7 @@ export const login = (email, password) => async (dispatch) => {
     }
   };
 
-  const body = JSON.stringify({ email, password });
+  const body = { email, password };
 
   try {
     const res = await axios.post('/api/auth', body, config);
@@ -89,7 +81,4 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-export const logout = () => (dispatch) => {
-  dispatch({ type: CLEAR_PROFILE });
-  dispatch({ type: LOGOUT });
-};
+export const logout = () => ({ type: LOGOUT });

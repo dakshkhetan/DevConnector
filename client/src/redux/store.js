@@ -4,6 +4,8 @@ import thunk from 'redux-thunk';
 
 import rootReducer from './reducers/root.reducer';
 
+import setAuthToken from '../utils/setAuthToken';
+
 const initialState = {};
 
 const middleware = [thunk];
@@ -13,5 +15,22 @@ const store = createStore(
   initialState,
   composeWithDevTools(applyMiddleware(...middleware))
 );
+
+// set up a store subscription listener
+// to store the users token in localStorage
+
+// initialize current state from redux store for subscription comparison preventing undefined error
+let currentState = store.getState();
+
+store.subscribe(() => {
+  // keep track of the previous & current state to compare changes
+  let previousState = currentState;
+  currentState = store.getState();
+  // if the token changes, set the value in localStorage & axios headers
+  if (previousState.auth.token !== currentState.auth.token) {
+    const token = currentState.auth.token;
+    setAuthToken(token);
+  }
+});
 
 export default store;
