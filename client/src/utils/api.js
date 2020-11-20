@@ -13,6 +13,7 @@ const api = axios.create({
 /**
  Intercept any error response from the API
  & check if the token is expired or no longer valid.
+
  Logout user if the token has expired.
 **/
 

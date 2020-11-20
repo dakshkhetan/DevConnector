@@ -1,4 +1,5 @@
 import api from '../../utils/api';
+import setAuthToken from '../../utils/setAuthToken';
 
 import {
   GET_POSTS,
@@ -15,6 +16,7 @@ import { setAlert } from './alert.action';
 
 export const getPosts = () => async (dispatch) => {
   try {
+    setAuthToken(localStorage.token);
     const res = await api.get('/posts');
 
     dispatch({
@@ -114,6 +116,7 @@ export const addPost = (formData) => async (dispatch) => {
 
 export const getPost = (id) => async (dispatch) => {
   try {
+    setAuthToken(localStorage.token);
     const res = await api.get(`/posts/${id}`);
 
     dispatch({

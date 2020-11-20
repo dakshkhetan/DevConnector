@@ -2,9 +2,9 @@ const axios = require('axios');
 const normalize = require('normalize-url');
 const { validationResult } = require('express-validator');
 
-const Post = require('../models/Post.model');
-const Profile = require('../models/Profile.model');
-const User = require('../models/User.model');
+const Post = require('../models/post.model');
+const Profile = require('../models/profile.model');
+const User = require('../models/user.model');
 
 exports.getCurrentUserProfile = async (req, res) => {
   try {
@@ -53,7 +53,7 @@ exports.createOrUpdateUserProfile = async (req, res) => {
     bio,
     skills: Array.isArray(skills)
       ? skills
-      : skills.split(',').map((skill) => ' ' + skill.trim()),
+      : skills.split(',').map((skill) => skill.trim()),
     status,
     githubusername
   };

@@ -20,9 +20,7 @@ const Posts = ({ getPosts, post: { posts } }) => {
       </p>
       <PostForm />
       <div className='posts'>
-        {posts.map((post) => (
-          <PostItem key={post._id} post={post} />
-        ))}
+        {posts && posts.map((post) => <PostItem key={post._id} post={post} />)}
       </div>
     </React.Fragment>
   );
